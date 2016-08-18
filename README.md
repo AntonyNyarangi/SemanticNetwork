@@ -1,2 +1,2 @@
 # SemanticNetwork
-Assignment
+AI Project assignment.

@@ -3,7 +3,7 @@
 #include <fstream>
 #include <stdlib.h>
 
-#include "SemanticNetworkClasses.h"
+#include "SemanticNetworkClasses.hpp"
 
 using namespace std;
 
@@ -12,6 +12,8 @@ using namespace std;
 // Node createTeacherNode();
 // Edge createEdge(Node o_node, Node t_node);
 int main(){
+	Node semester;
+	semester = Graph::getSemester();
 	Node created;
 	created = Graph::createNode();
 }

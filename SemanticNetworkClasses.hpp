@@ -5,16 +5,16 @@
 using namespace std;
 
 class Node{
-private:
+public:
 	//shared data
 	string objName;
-	int objType;
+	string objType;
 
 	 //data for students
 	string regNumber;
 
 	//data for semester
-	int semesterNumber;
+	string semesterNumber;
 
 	//data for teachers
 	string staffNumber;
@@ -26,7 +26,7 @@ private:
 		std::cout<< "Enter new Registration Number" << endl;
 		getline(std::cin,regNumber);
 		// std::getline(std::cin,regNumber);
-		semesterNumber = -1;
+		semesterNumber = "-1";
 		staffNumber = "-1";
 		courseID ="-1"; 
 	}
@@ -44,7 +44,7 @@ private:
 		getline(std::cin,courseID);
 		regNumber = "-1";
 		staffNumber = "-1";
-		semesterNumber = -1;
+		semesterNumber = "-1";
 	}
 
 	void populateTeacher(){
@@ -52,7 +52,7 @@ private:
 		getline(std::cin,staffNumber);
 		regNumber = "-1";
 		courseID = "-1";
-		semesterNumber = -1;
+		semesterNumber = "-1";
 	}
 
 	void write_to_file(){
@@ -67,17 +67,19 @@ private:
 		myFile.close();
 	}
 
-public:
+//public:
 
-	void setData(string name, int type){
+	void setData(string name, string type){
 		objName = name;
 		objType = type;
-		switch (objType){
-			case 1: populateStudent();write_to_file();	
+		char switchValue;
+		switchValue = convertToChar(objType);	
+		switch (switchValue){
+			case '1': populateStudent();write_to_file();	
 			break;			
-			case 3: populateCourse();write_to_file();	
+			case '3': populateCourse();write_to_file();	
 			break;		
-			case 4: populateTeacher();write_to_file();				
+			case '4': populateTeacher();write_to_file();				
 			break;
 			default: std::cout <<"Invalid type"<<endl;	
 		}
@@ -85,15 +87,19 @@ public:
 
 	void setSemesterData(){
 		objName = "Yr2_Sem1";
-		objType = 2;
-		semesterNumber = 1;
+		objType = "2";
+		semesterNumber = "1";
 		regNumber = "-1";
 		staffNumber = "-1";
 		courseID ="-1";
 		write_to_file();		
 	}
 
-	int getType(){
+	string getName(){
+		return objName;
+	}
+
+	string getType(){
 		return objType;
 	}
 
@@ -101,13 +107,25 @@ public:
 		std::cout << objName << ", ";	
 		if (regNumber != "-1"){
 			std::cout << regNumber << endl;			
-		}else if(semesterNumber != -1){
+		}else if(semesterNumber != "-1"){
 			std::cout << semesterNumber << endl;
 		}else if(staffNumber != "-1"){
 			std::cout << staffNumber << endl;
 		}else{
 			std::cout << courseID << endl;
 		}		
+	}
+
+	char convertToChar(string val){
+		char character;
+		if(val=="1"){
+			character = '1';			
+		}else if(val == "3"){
+			character = '3';
+		}else if(val == "4"){
+			character = '4';
+		}
+		return character;
 	}
 };
 
@@ -135,16 +153,21 @@ public:
 	Node getTarget(){return target;}
 	string getRelationship(){return relationship;}
 
-	// void write_to_file(){
-	// 	ofstream myFile;
-	// 	myFile.open("edges.txt",ofstream::out | ofstream::app);
-	// 	myFile << origin.objName << ",";
-	// 	myFile << origin.objType << ",";
-	// 	myFile << target.objName << ",";
-	// 	myFile << target.objType << ",";
-	// 	myFile << relationship << endl;
-	// 	myFile.close();
-	// }
+	void write_to_file(){
+		string originName;string originType;
+		string targetName;string targetType;
+		originName = origin.getName();originType = origin.getType();
+		targetName = target.getName();targetType = target.getType();
+
+		ofstream myFile;
+		myFile.open("edges.txt",ofstream::out | ofstream::app);
+		myFile << originName << ",";
+		myFile << originType << ",";
+		myFile << targetName << ",";
+		myFile << targetType << ",";
+		myFile << relationship << endl;
+		myFile.close();
+	}
 };
 
 
@@ -188,7 +211,7 @@ public:
 	static Node createStudentNode(){
 		Node newStudent;
 		string name;
-		int type = 1;
+		string type = "1";
 
 		cout<<"Please enter the name of the student"<< endl;
 		getline(std::cin,name);
@@ -201,7 +224,7 @@ public:
 	static Node createCourseUnitNode(){
 		Node newCourse;
 		string name;
-		int type = 3;
+		string type = "3";
 
 		cout<<"Please enter the name of the course"<< endl;
 		getline(std::cin,name);	
@@ -214,7 +237,7 @@ public:
 	static Node createTeacherNode(){
 		Node newTeacher;
 		string name;
-		int type = 4;
+		string type = "4";
 
 		cout<<"Please enter the name of the Teacher"<< endl;
 		getline(std::cin,name);
@@ -226,18 +249,27 @@ public:
 
 	static Edge createEdge(Node o_node, Node t_node){
 		Edge newEdge;
-		if(o_node.getType() == 1 && t_node.getType() == 2){
+		if(o_node.getType() == "1" && t_node.getType() == "2"){
 			newEdge.setRelationship("Registered in");
-		}else if(o_node.getType() == 2 && t_node.getType() == 3){
+		}else if(o_node.getType() == "2" && t_node.getType() == "3"){
 			newEdge.setRelationship("Has");
-		}else if(o_node.getType() == 3 && t_node.getType() == 4){
+		}else if(o_node.getType() == "3" && t_node.getType() == "4"){
 			newEdge.setRelationship("Taught By");
+		}else if(o_node.getType() == "1" && t_node.getType() == "3"){
+			newEdge.setRelationship("Enrolled in");
 		}
 
 		newEdge.setOrigin(o_node);
-		newEdge.setTarget(t_node);	
+		newEdge.setTarget(t_node);
+		newEdge.write_to_file();	
 
 		return newEdge;
 	}
+
+
+
+	//read nodes from file into array
+
+	//read edges from file into array
 
 };

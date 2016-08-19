@@ -7,17 +7,23 @@
 
 using namespace std;
 
+void programIntro();
 void userChoseCreateNode();
 void userChoseUseData();
 
 Node semester = Graph::getSemester();
 
 int main(){
+	programIntro();	
+}
 
+void programIntro(){
+	int choice;
 	cout<<"What would you like to do today?"<<endl;
 	cout<<"1) Create a new Node"<<endl;
 	cout<<"2) Use the data in the Network"<<endl;
-	int choice;
+	cout<<"Choice:";
+	
 	cin>>choice;
 	cin.ignore();
 
@@ -25,6 +31,7 @@ int main(){
 		case 1: userChoseCreateNode();
 		break;
 		case 2: userChoseUseData();
+		break;
 		default: cout<<"Invalid choice"<<endl;
 		exit(1);
 	}
@@ -32,8 +39,7 @@ int main(){
 
 void userChoseCreateNode(){
 	Node myNode;
-	Edge myEdge;
-	int size;	
+	Edge myEdge;		
 	myNode = Graph::createNode();
 	if(myNode.getType() == "1"){
 		myEdge = Graph::createEdge(myNode,semester);
@@ -42,6 +48,7 @@ void userChoseCreateNode(){
 	}else if(myNode.getType() == "4"){
 
 		int linesInFile = 0;
+		int size;
 		int i;
 		string line;
 		ifstream myFile;
@@ -67,19 +74,16 @@ void userChoseCreateNode(){
 					getline(myFile,myNodes[i].semesterNumber, ',');
 					getline(myFile,myNodes[i].staffNumber, ',');
 					getline(myFile,myNodes[i].courseID, '\n');
-					cout<<endl<<endl;					
-					myNodes[i].showNodeData();
-				}
-				myFile.close();				
-			}						
+					//myNodes[i].showNodeData();
+				}							
+			}
+			myFile.close();	
+
 		}else{
 			cout <<"Could not open file"<<endl;
 		}
 
-		string code;
-
-		myNodes[10].showNodeData();
-
+		string code;		
 
 		cout<<endl<<"Please enter the course code of the unit taught: ";
 		getline(cin,code);
@@ -89,61 +93,38 @@ void userChoseCreateNode(){
 				myEdge = Graph::createEdge(myNodes[i],myNode);
 			}
 		}
+
+		cout<<"That unit is not in the system. Adding new Course Unit."<<endl;
+		Node newCourseUnit;
+		newCourseUnit = Graph::createCourseUnitNode();
+		Edge newCourse_SemesterEdge;
+		newCourse_SemesterEdge = Graph::createEdge(semester,newCourseUnit);
+		myEdge = Graph::createEdge(newCourseUnit,myNode);
 	}
-
-
-
-
-			//read nodes from file, check for nodes that are of type 3(course units)
-			//display them to the user and have them choose one;
-			//otherwise have them create a new class node;
-
-
-		// Node newCourseUnit;
-		// newCourseUnit = Graph::createCourseUnitNode();
-		// Edge newCourse_SemesterEdge;
-		// newCourse_SemesterEdge = Graph::createEdge(semester,newCourseUnit);
-		// myEdge = Graph::createEdge(newCourseUnit,myNode);
 
 }
 
 void userChoseUseData(){
+	int choice;
+	cout<<endl<<endl;
+	cout<<"How would you like to use the Knowledge in the network?"<<endl;
+	cout<<"1) Get the number of students taking a course unit"<<endl;
+	cout<<"2) Get the course units that have no students"<<endl;
+	cout<<"3) Get general information about available course units"<<endl;
+	cout<<"Choice:";
 
+	cin>>choice;
+
+	switch(choice){
+		case 1: getStudentsTakingCourseUnit();
+		break;
+		case 2: getCourseUnitsWithNOStudents();
+		break;
+		case 3: getGeneralInfoOnCourseUnits();
+		break;
+		default: cout<<"Invalid choice"<<endl;
+		exit(1);
+	}
 }
 
-
-// Node myNode;
-// myNode = Graph::createNode();
-// if myNode
-
-// 	Node semester;
-// semester = Graph::getSemester();
-// Node created;
-// created = Graph::createNode();
-// Node course;
-// course = Graph::createNode();
-// Edge myEdge;
-// myEdge = Graph::createEdge(created,semester);
-// Edge myEdge2;
-// myEdge2 = Graph::createEdge(created,course);
-// Node testO;
-// Node test1;
-// Node tester0;
-// Node tester1;
-// tester0 = myEdge2.getOrigin();
-// tester1 = myEdge2.getTarget();
-// test1 = myEdge.getTarget();
-// testO = myEdge.getOrigin();	
-// string rlshp;
-// string rlshp2;
-// rlshp = myEdge.getRelationship();
-// rlshp2 = myEdge2.getRelationship();
-
-// cout<<endl<<endl;
-
-// testO.showNodeData();
-// cout<<rlshp<<": ";
-// test1.showNodeData();
-// cout<<rlshp2<<": ";
-// tester1.showNodeData();
 

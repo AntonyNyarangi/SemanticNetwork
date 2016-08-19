@@ -265,9 +265,6 @@ public:
 
 		return newEdge;
 	}
-
-
-
 	//read nodes from file into array
 
 	//read edges from file into array
